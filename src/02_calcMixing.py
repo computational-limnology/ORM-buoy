@@ -39,10 +39,16 @@ def center_buoyancy(temp, depth, g=9.81):
     depth = np.asarray(depth, dtype=float)
     n2 = buoyancy_frequency(temp, depth, g=g)
     n2_positive = np.where(n2 > 0, n2, 0.0)
-    denom = np.trapz(n2_positive, depth)
+    denom = np.trapezoid(n2_positive, depth)
     if denom == 0 or np.isnan(denom):
         return np.nan
-    return float(np.trapz(depth * n2_positive, depth) / denom)
+    return float(np.trapezoid(depth * n2_positive, depth) / denom)
+
+
+def _integrate(y, x):
+    if hasattr(np, 'trapezoid'):
+        return np.trapezoid(y, x)
+    return np.trapz(y, x)
 
 
 def core_metrics(in_area, in_depth_area, in_temp, in_depth_temp, dz=0.1, g=9.81):
@@ -69,12 +75,12 @@ def core_metrics(in_area, in_depth_area, in_temp, in_depth_temp, dz=0.1, g=9.81)
         right=in_temp[-1],
     )
 
-    V = np.trapz(area, depth)
-    z_v = np.trapz(depth * area, depth) / V
+    V = _integrate(area, depth)
+    z_v = _integrate(depth * area, depth) / V
 
     rho = calc_dens(temp)
-    mass = np.trapz(rho * area, depth)
-    z_g = np.trapz(depth * rho * area, depth) / mass
+    mass = _integrate(rho * area, depth)
+    z_g = _integrate(depth * rho * area, depth) / mass
     rho_mean = mass / V
     z_mean = V / np.max(area)
     Ws = g * z_mean * rho_mean * (z_g - z_v)
