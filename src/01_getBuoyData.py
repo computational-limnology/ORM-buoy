@@ -90,8 +90,8 @@ def build_daily_12utc(df):
         if series.index.duplicated().any():
             series = series.groupby(level=0).mean()
 
-        start = series.index.min().floor("D") + pd.Timedelta(hours=12)
-        end = series.index.max().floor("D") + pd.Timedelta(hours=12)
+        start = series.index.min().floor("D") #+ pd.Timedelta(hours=12)
+        end = series.index.max().floor("D")   #+ pd.Timedelta(hours=12)
         target_index = pd.date_range(start=start, end=end, freq="D", tz="UTC")
 
         interp = series.reindex(series.index.union(target_index)).interpolate(method="time").reindex(target_index)
