@@ -206,7 +206,9 @@ combined_final = pd.concat([reduced_final, metrics_long], ignore_index=True, sor
 combined_final = combined_final.sort_values(["datetime", "site_id", "depth", "variable"]).reset_index(drop=True)
 
 merged_output_parquet = root_dir / "output" / "orm_long_processed.parquet"
+merged_output_csv = root_dir / "output" / "orm_long_processed.csv"
 
 combined_final.to_parquet(merged_output_parquet, index=False)
+combined_final.to_csv(merged_output_csv, index=False)
 
 print(f"Saved reduced data with metrics long format to: {merged_output_parquet}")
