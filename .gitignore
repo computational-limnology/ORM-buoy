@@ -1,2 +1,5 @@
 # Ignore server download script
 src/00_downloadServer.py
+run_daily.sh
+src/logs/
+
