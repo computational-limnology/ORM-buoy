@@ -198,7 +198,8 @@ metrics_long = (
     )
     .dropna(subset=["observation"])
 )
-metrics_long["depth"] = 0.0
+# metrics_long["depth"] = 0.0
+metrics_long["depth"] = np.nan
 metrics_long = metrics_long[["datetime", "site_id", "depth", "observation", "variable"]]
 
 reduced_final = df[["datetime", "site_id", "depth", "observation", "variable"]].copy()
